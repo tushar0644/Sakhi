@@ -1986,7 +1986,14 @@
                 `;
             },
 
-            renderCheckout(container) {
+       async renderCheckout(container) {
+           const { data } = await supabaseClient.auth.getUser();
+
+if (!data.user) {
+    alert("Please login first");
+    router.navigate('login');
+    return;
+}
                 const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
                 
                 container.innerHTML = `
@@ -2336,12 +2343,38 @@ renderSignup(container) {
             return false;
         }
 
-        function placeOrder() {
-            alert('Order Placed Successfully! Thank you for shopping with Sakhi.');
-            cart = [];
-            saveCart();
-            router.navigate('home');
-        }
+async function placeOrder() {
+
+    const { data } = await supabaseClient.auth.getUser();
+
+    if (!data.user) {
+        alert("Login required");
+        router.navigate('login');
+        return;
+    }
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+    const { error } = await supabaseClient
+        .from("orders")
+        .insert([
+            {
+                user_id: data.user.id,
+                items: cart,
+                total_amount: subtotal
+            }
+        ]);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("Order placed successfully!");
+    cart = [];
+    saveCart();
+    router.navigate('home');
+}
         async function handleSignup() {
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
@@ -2394,9 +2427,17 @@ async function handleLogin() {
                 navbar.style.boxShadow = 'none';
             }
         });
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseClient = window.supabase.createClient(
+  "YOUR_SUPABASE_URL",
+  "YOUR_PUBLIC_ANON_KEY"
+);
+</script>
     </script>
 </body>
 
 </html>
+
 
 
