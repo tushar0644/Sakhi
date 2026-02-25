@@ -1409,7 +1409,9 @@
             </ul>
             <div class="nav-icons">
                 <a href="#" class="icon-btn"><i class="fas fa-search"></i></a>
-                <a href="#" class="icon-btn"><i class="fas fa-user"></i></a>
+               <a href="#" class="icon-btn" onclick="router.navigate('login')">
+    <i class="fas fa-user"></i>
+</a>
                 <a href="#" class="icon-btn cart-icon" onclick="router.navigate('cart')">
                     <i class="fas fa-shopping-bag"></i>
                     <span class="cart-count" id="cartCount">0</span>
@@ -1639,6 +1641,12 @@
                         break;
                     case 'contact':
                         this.renderContact(app);
+                        break;
+                   case 'login':
+                        this.renderLogin(app);
+                        break;
+                   case 'signup':
+                        this.renderSignup(app);
                         break;
                     case 'policy':
                         this.renderPolicy(app);
@@ -2202,7 +2210,37 @@
                     </section>
                 `;
             },
+renderLogin(container) {
+    container.innerHTML = `
+        <section class="section">
+            <div class="container" style="max-width:500px;">
+                <h1>Login</h1>
+                <input type="email" id="loginEmail" class="form-control" placeholder="Email">
+                <input type="password" id="loginPassword" class="form-control" placeholder="Password">
+                <button class="btn btn-primary btn-block" onclick="handleLogin()">Login</button>
+                <p>Don't have an account? 
+                   <a href="#" onclick="router.navigate('signup')">Signup</a>
+                </p>
+            </div>
+        </section>
+    `;
+},
 
+renderSignup(container) {
+    container.innerHTML = `
+        <section class="section">
+            <div class="container" style="max-width:500px;">
+                <h1>Signup</h1>
+                <input type="email" id="signupEmail" class="form-control" placeholder="Email">
+                <input type="password" id="signupPassword" class="form-control" placeholder="Password">
+                <button class="btn btn-primary btn-block" onclick="handleSignup()">Create Account</button>
+                <p>Already have an account? 
+                   <a href="#" onclick="router.navigate('login')">Login</a>
+                </p>
+            </div>
+        </section>
+    `;
+},
             createProductCard(product) {
                 return `
                     <div class="product-card" onclick="router.navigate('product', {id: ${product.id}})">
@@ -2304,6 +2342,37 @@
             saveCart();
             router.navigate('home');
         }
+        async function handleSignup() {
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+
+    const { error } = await supabaseClient.auth.signUp({
+        email,
+        password
+    });
+
+    if (error) alert(error.message);
+    else {
+        alert("Signup successful");
+        router.navigate('login');
+    }
+}
+
+async function handleLogin() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) alert(error.message);
+    else {
+        alert("Login successful");
+        router.navigate('home');
+    }
+}
 
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
@@ -2329,4 +2398,5 @@
 </body>
 
 </html>
+
 
