@@ -1470,8 +1470,19 @@
             </div>
         </div>
     </footer>
+<!-- Supabase Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const supabaseClient = window.supabase.createClient(
+  "https://jagrryoungcrrfceklsl.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphZ3JyeW91bmdjcnJmY2VrbHNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjExNzEsImV4cCI6MjA4NzU5NzE3MX0.-XZofGGW7B2K9vbvU-JHK0Rp9jE9CyqYFs4A_PDzAk0"
+);
+</script>
     <script>
+        if (!window.supabase) {
+   console.error("Supabase not loaded");
+}
         // Product Data
         const products = [
             {
@@ -2427,17 +2438,10 @@ async function handleLogin() {
                 navbar.style.boxShadow = 'none';
             }
         });
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabaseClient = window.supabase.createClient(
-  "YOUR_SUPABASE_URL",
-  "YOUR_PUBLIC_ANON_KEY"
-);
-</script>
     </script>
 </body>
-
 </html>
+
 
 
 
